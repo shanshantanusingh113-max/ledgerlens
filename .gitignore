@@ -13,3 +13,6 @@ deck/out/full*.png
 backend/data/
 backend/cache/analysis_*.pkl
 backend/cache/precache.log
+
+# Local Netlify folder
+.netlify

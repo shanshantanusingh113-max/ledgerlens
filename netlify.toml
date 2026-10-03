@@ -1,0 +1,15 @@
+# Netlify build for the Next.js frontend. The backend is a separate service (see README.md).
+# publish is written from the repo root because that is where the CLI resolves it.
+[build]
+  base = "frontend"
+  command = "pnpm build"
+  publish = "frontend/.next"
+
+[build.environment]
+  NODE_VERSION = "24"
+  NEXT_TELEMETRY_DISABLED = "1"
+
+# Gives /findings/[id] a serverless function. Without it Netlify deploys the static
+# output only and every route 404s. No version pin, Netlify updates it each build.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
