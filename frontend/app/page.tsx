@@ -5,7 +5,7 @@ import { ProofDemo, type DemoProof } from "@/components/landing/ProofDemo";
 import { RunDemo } from "@/components/landing/RunDemo";
 import { CountUp } from "@/components/landing/CountUp";
 import { Nav, ScrollProgress } from "@/components/landing/Nav";
-import { ParticleField } from "@/components/landing/ParticleField";
+import { RingField } from "@/components/landing/RingField";
 import { Reveal } from "@/components/landing/Reveal";
 import { CauseBar, MoneyStrip } from "@/components/MoneyStrip";
 import { RingStory } from "@/components/RingStory";
@@ -73,7 +73,7 @@ export default function StartPage() {
             </p>
           </div>
           <div className="relative">
-            <ParticleField className="mx-auto aspect-square w-full max-w-[560px]" />
+            <RingField className="mx-auto aspect-square w-full max-w-[560px]" />
           </div>
         </div>
       </section>
@@ -252,7 +252,7 @@ export default function StartPage() {
       </section>
 
       <section className="relative overflow-hidden py-32 lg:py-44">
-        <ParticleField className="pointer-events-none absolute inset-0 h-full w-full opacity-40" density={0.5} />
+        <RingField className="pointer-events-none absolute inset-0 h-full w-full" opacity={0.4} />
         <div className={`relative ${WIDE}`}>
           <h2 className="display max-w-[12ch]">Reconcile September 2025 now.</h2>
           <div className="mt-12">
