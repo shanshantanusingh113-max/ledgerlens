@@ -73,7 +73,7 @@ export function FindingDemo({ finding, excessPaise, netPayablePaise }: { finding
       </table>
       <p className="px-3 py-2 text-[12px] text-ink-2">Rule: {finding.rule_ref}</p>
 
-      <div className="mt-2 rounded-surface bg-cream p-5">
+      <div className="mt-2 rounded-surface bg-inset p-5">
         <p className="font-semibold text-orange-deep">Why this was flagged</p>
         <p className="mt-1 text-[15px] leading-relaxed">{finding.reason}</p>
         <p className="mt-2 font-semibold">What to do</p>

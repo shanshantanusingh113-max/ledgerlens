@@ -8,7 +8,7 @@ import { RunOverlay } from "./RunOverlay";
 import { ErrorState } from "./ui";
 
 /** The landing page's main action: load the demo company, run September 2025, then open the dashboard. */
-export function StartActions({ to = "/dashboard", onDark = false, withOverlay = false }: { to?: string; onDark?: boolean; withOverlay?: boolean }) {
+export function StartActions({ to = "/dashboard", pill = false, withOverlay = false }: { to?: string; pill?: boolean; withOverlay?: boolean }) {
   const run = useRun();
   const router = useRouter();
   const busy = run.runState === "loading" || run.runState === "running";
@@ -24,13 +24,14 @@ export function StartActions({ to = "/dashboard", onDark = false, withOverlay = 
           <ErrorState message={run.loadError} onRetry={run.retry} />
         </div>
       )}
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-        <button className="btn btn-primary px-6 py-3.5 text-[16px]" onClick={start} disabled={!run.ready || !!run.loadError || busy}>
+      <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+        <button className={pill ? "pill pill-accent" : "btn btn-primary px-6 py-3.5 text-[16px]"} onClick={start} disabled={!run.ready || !!run.loadError || busy}>
           {run.runId ? "Run again" : "Load demo company"}
+          <ArrowRight className="size-4" aria-hidden />
         </button>
         {run.runId && (
-          <Link href={to} className={`inline-flex items-center gap-1.5 text-[16px] font-semibold underline-offset-4 hover:underline ${onDark ? "text-cream" : "text-ink"}`}>
-            Open dashboard <ArrowRight className="size-4" aria-hidden />
+          <Link href={to} className="label link-underline text-ink-3 hover:text-ink">
+            Open dashboard
           </Link>
         )}
       </div>

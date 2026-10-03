@@ -24,7 +24,7 @@ function PartyPanel({ view, period, onClose, onOpenFinding }: { view: PartyView 
   const { party, invoices, payments, findings } = view;
   const invoiced = invoices.reduce((sum, i) => sum + i.total_paise, 0);
   return (
-    <div className="rounded-surface border border-white/15 bg-[#2B211D] p-4 text-cream">
+    <div className="rounded-surface border border-white/15 bg-slate-panel p-4 text-cream">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="font-display text-[20px] font-bold leading-tight">{party.name}</p>
@@ -295,7 +295,7 @@ export default function GraphPage() {
         <div className="mb-4 flex flex-wrap items-center gap-x-6 gap-y-3 px-2">
           <div className="flex rounded-control border border-line bg-paper p-0.5" role="tablist" aria-label="Which Parties to show">
             {SIDES.map((s) => (
-              <button key={s.id} role="tab" aria-selected={side === s.id} onClick={() => setSide(s.id)} className={`rounded-bar px-4 py-1.5 font-semibold ${side === s.id ? "bg-ink text-white" : "text-ink-2"}`}>
+              <button key={s.id} role="tab" aria-selected={side === s.id} onClick={() => setSide(s.id)} className={`rounded-bar px-4 py-1.5 font-semibold ${side === s.id ? "bg-ink text-app-bg" : "text-ink-2"}`}>
                 {s.label}
               </button>
             ))}
@@ -326,7 +326,7 @@ export default function GraphPage() {
               {partyId ? (
                 <PartyPanel view={party} period={period} onClose={() => setPartyId(null)} onOpenFinding={setOpenId} />
               ) : graph.rings.length === 0 ? (
-                <div className="rounded-surface border border-white/10 bg-[#2B211D] p-4 text-cream">No linked Parties in this period.</div>
+                <div className="rounded-surface border border-white/10 bg-slate-panel p-4 text-cream">No linked Parties in this period.</div>
               ) : (
                 graph.rings.map((r) => {
                   const active = r.id === ring?.id;
@@ -336,7 +336,7 @@ export default function GraphPage() {
                       key={r.id}
                       onClick={() => setSelected(r.id)}
                       aria-pressed={active}
-                      className={`rounded-surface border p-4 text-left text-cream ${active ? "border-[#F26D6D]/70 bg-[#2B211D]" : "border-white/10 bg-[#2B211D]/80 opacity-80 hover:opacity-100"}`}
+                      className={`rounded-surface border p-4 text-left text-cream ${active ? "border-[#F26D6D]/70 bg-slate-panel" : "border-white/10 bg-slate-panel opacity-80 hover:opacity-100"}`}
                     >
                       <p className={`mb-1.5 flex items-center gap-2 font-display text-[18px] font-bold ${isRing ? "text-[#FF8A8A]" : "text-[#F2B85A]"}`}>
                         <ShieldAlert className="size-5" aria-hidden />

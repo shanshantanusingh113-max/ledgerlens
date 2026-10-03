@@ -14,6 +14,11 @@ function group(whole: number): string {
   return [...groups, tail].join(",");
 }
 
+/** A whole number in Indian grouping: 281615 is 2,81,615. */
+export function indian(value: number): string {
+  return group(Math.round(value));
+}
+
 /** Rs with Indian grouping: 42000000 paise is Rs 4,20,000. */
 export function rupees(paise: number, withPaise = false): string {
   const sign = paise < 0 ? "-" : "";

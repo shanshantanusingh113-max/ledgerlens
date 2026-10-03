@@ -175,7 +175,7 @@ export function FindingBody({ findingId, onClose }: { findingId: string; onClose
         </div>
       )}
 
-      <div className="rounded-surface bg-cream p-5">
+      <div className="rounded-surface bg-inset p-5">
         <p className="mb-1 flex items-center gap-2 font-semibold text-orange-deep">
           <Sparkles className="size-4" aria-hidden /> Why this was flagged
         </p>

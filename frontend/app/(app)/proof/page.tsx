@@ -135,7 +135,7 @@ export default function ProofPage() {
           right={
             <div className="flex rounded-control border border-line bg-paper p-0.5" role="tablist" aria-label="Months to count">
               {SCOPES.map((s) => (
-                <button key={s.id} role="tab" aria-selected={scope === s.id} onClick={() => setScope(s.id)} className={`rounded-bar px-4 py-1.5 font-semibold ${scope === s.id ? "bg-ink text-white" : "text-ink-2"}`}>
+                <button key={s.id} role="tab" aria-selected={scope === s.id} onClick={() => setScope(s.id)} className={`rounded-bar px-4 py-1.5 font-semibold ${scope === s.id ? "bg-ink text-app-bg" : "text-ink-2"}`}>
                   {s.label}
                 </button>
               ))}

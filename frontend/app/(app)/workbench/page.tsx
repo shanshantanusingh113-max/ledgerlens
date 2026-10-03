@@ -108,7 +108,7 @@ function MatchPanel({ matchId, onClose }: { matchId: string; onClose: () => void
               <Side title={detail.left_all.length > 1 ? "Invoices" : "Invoice"} records={detail.left_all} />
               <Side title={TABLE_NAMES[detail.right[0]?.table] ?? KIND_NAME[detail.match.kind]} records={detail.right} />
             </div>
-            <div className="rounded-surface bg-cream p-5">
+            <div className="rounded-surface bg-inset p-5">
               <p className="mb-1 font-semibold text-orange-deep">Why these belong together</p>
               <ul className="list-disc pl-5">
                 {detail.match.reasons.map((reason) => (
@@ -173,7 +173,7 @@ export default function WorkbenchPage() {
         right={
           <div className="flex rounded-control border border-line bg-paper p-0.5" role="tablist">
             {(["findings", "matches"] as const).map((t) => (
-              <button key={t} role="tab" aria-selected={tab === t} onClick={() => setTab(t)} className={`rounded-bar px-4 py-1.5 font-semibold ${tab === t ? "bg-ink text-white" : "text-ink-2"}`}>
+              <button key={t} role="tab" aria-selected={tab === t} onClick={() => setTab(t)} className={`rounded-bar px-4 py-1.5 font-semibold ${tab === t ? "bg-ink text-app-bg" : "text-ink-2"}`}>
                 {t === "findings" ? "Findings" : "Matches"}
               </button>
             ))}

@@ -1,30 +1,69 @@
 @import "tailwindcss";
 
+/* Dark is the default and the brand. Light is the same system with the values turned around. */
 :root {
+  color-scheme: dark;
+  --cream: #f5f3f8;
+  --cream-2: #1b1b22;
+  --paper: #0b0b10;
+  --app-bg: #000000;
+  --ink: #ffffff;
+  --ink-2: #bdbdbd;
+  --ink-3: #8d8b96;
+  --line: rgba(255, 255, 255, 0.14);
+  --line-2: rgba(255, 255, 255, 0.07);
+  --inset: #131318;
+  --slate-panel: #15151b;
+  --side: #08080c;
+  --accent: #8052ff;
+  --iris: #8052ff;
+  --spark: #ffb829;
+  --orange: #ffb829;
+  --orange-deep: #ffb829;
+  --orange-soft: #0e0a03;
+  --ok: #3ecf8e;
+  --ok-soft: #071a12;
+  --bad: #ff6b6b;
+  --bad-soft: #1d0d0e;
+  --dup: #ffb829;
+  --dup-soft: #1b1405;
+  --miss: #a78bfa;
+  --miss-soft: #14101f;
+  --r-control: 4px;
+  --r-surface: 6px;
+  --r-bar: 2px;
+  --r-pill: 24px;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
   --cream: #ffefd8;
   --cream-2: #fff7ec;
   --paper: #ffffff;
   --app-bg: #fbf8f5;
   --ink: #24110c;
   --ink-2: #5b4339;
-  --ink-3: #8c7368;
+  --ink-3: #7f685c;
   --line: rgba(36, 17, 12, 0.13);
   --line-2: rgba(36, 17, 12, 0.07);
+  --inset: #ffefd8;
+  --slate-panel: #2b211d;
   --side: #1f1714;
+  --accent: #6b3ff0;
+  --iris: #6b3ff0;
+  --spark: #9c6200;
+  /* Warm, because every use of it sits on a dark surface in this theme. */
   --orange: #f28c3a;
-  --orange-deep: #d2601a;
-  --orange-soft: #fdddbf;
-  --ok: #2e9d6a;
+  --orange-deep: #6b3ff0;
+  --orange-soft: #efe9ff;
+  --ok: #1f7d51;
   --ok-soft: #ddf3e8;
-  --bad: #d64545;
+  --bad: #c93a3a;
   --bad-soft: #fbe1df;
   --dup: #c98a12;
   --dup-soft: #fbefd2;
   --miss: #6957d6;
   --miss-soft: #e6e2fb;
-  --r-control: 4px;
-  --r-surface: 6px;
-  --r-bar: 2px;
 }
 
 @theme inline {
@@ -37,7 +76,12 @@
   --color-ink-3: var(--ink-3);
   --color-line: var(--line);
   --color-line-2: var(--line-2);
+  --color-inset: var(--inset);
+  --color-slate-panel: var(--slate-panel);
   --color-side: var(--side);
+  --color-accent: var(--accent);
+  --color-iris: var(--iris);
+  --color-spark: var(--spark);
   --color-orange: var(--orange);
   --color-orange-deep: var(--orange-deep);
   --color-orange-soft: var(--orange-soft);
@@ -52,10 +96,11 @@
   --font-sans: var(--font-inter), system-ui, sans-serif;
   --font-display: var(--font-spartan), var(--font-inter), sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, monospace;
-  --shadow-float: 0 20px 40px -20px rgba(80, 30, 10, 0.35);
+  --shadow-float: 0 0 0 1px rgba(255, 255, 255, 0.07), 0 40px 80px -48px rgba(0, 0, 0, 0.9);
   --radius-control: var(--r-control);
   --radius-surface: var(--r-surface);
   --radius-bar: var(--r-bar);
+  --radius-pill: var(--r-pill);
 }
 
 body {
@@ -63,6 +108,12 @@ body {
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: 14px;
+  font-weight: 400;
+}
+
+/* The nav is fixed, so anchors land below it. */
+html {
+  scroll-padding-top: 104px;
 }
 
 /* A section of a page: a heavy rule on top, content flush with it, no box. */
@@ -109,13 +160,46 @@ select:not(:disabled) {
   cursor: not-allowed;
 }
 .btn-primary {
-  background: var(--orange-deep);
-  border-color: var(--orange-deep);
+  background: var(--accent);
+  border-color: var(--accent);
   color: #fff;
 }
 .btn-primary:hover:not(:disabled) {
-  background: #a84a10;
-  border-color: #a84a10;
+  background: color-mix(in srgb, var(--accent) 82%, #fff);
+  border-color: color-mix(in srgb, var(--accent) 82%, #fff);
+}
+
+/* The landing page's single action: a violet pill, 24px radius. */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: var(--r-pill);
+  border: 1px solid transparent;
+  padding: 14px 26px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s, background-color 0.2s, opacity 0.2s;
+}
+.pill-accent {
+  background: var(--iris);
+  color: #fff;
+  box-shadow: 0 0 0 0 rgba(128, 82, 255, 0);
+}
+.pill-accent:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--iris) 84%, #fff);
+  box-shadow: 0 12px 40px -14px rgba(128, 82, 255, 0.85);
+  transform: translateY(-2px);
+}
+.pill-accent:active:not(:disabled) {
+  transform: translateY(0);
+}
+.pill-accent:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
 /* A row that opens something: the whole row tints and its call to action fills. */
@@ -155,8 +239,90 @@ a:focus-visible,
 button:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid var(--orange-deep);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+/* Landing page type. Scale carries the hierarchy, never weight. */
+.label {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+.display {
+  font-weight: 400;
+  font-size: clamp(2.75rem, 6.6vw, 7.0625rem);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+.heading-lg {
+  font-weight: 400;
+  font-size: clamp(2.25rem, 5.4vw, 4.875rem);
+  line-height: 1.06;
+  letter-spacing: -0.04em;
+}
+.heading {
+  font-weight: 400;
+  font-size: clamp(1.6rem, 2.5vw, 2.6rem);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+.lede {
+  font-size: 18px;
+  font-weight: 200;
+  line-height: 1.5;
+}
+
+/* Motion. Everything below is switched off when the reader asks for less of it. */
+.rise {
+  display: inline-block;
+  opacity: 0;
+  animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--rise-delay, 0s);
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.4em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0s);
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 2px;
+  z-index: 60;
+  background: var(--iris);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  will-change: transform;
+}
+
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  transition: background-size 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.2s;
+}
+.link-underline:hover {
+  background-size: 100% 1px;
 }
 
 .skeleton {
@@ -189,9 +355,28 @@ textarea:focus-visible {
   animation: feed-in 0.25s ease-out;
 }
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   .skeleton,
   .drawer,
   .feed-line {
     animation: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .rise {
+    opacity: 1;
+    animation: none;
+  }
+  .pill,
+  .link-underline {
+    transition: none;
+  }
+  .progress {
+    display: none;
   }
 }
