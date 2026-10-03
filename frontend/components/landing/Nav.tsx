@@ -75,7 +75,7 @@ export function Nav() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${lifted ? "border-b border-line bg-app-bg" : "border-b border-transparent"}`}
+      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${lifted ? "glass border-b border-line backdrop-blur-xl backdrop-saturate-150" : "border-b border-transparent"}`}
     >
       <div className="mx-auto flex max-w-[1280px] items-center gap-8 px-10 py-5">
         <a href="#top" className="flex items-center gap-2.5">
@@ -106,7 +106,7 @@ export function Nav() {
       </div>
 
       {open && (
-        <nav aria-label="Page" className="border-t border-line bg-app-bg px-10 py-6 lg:hidden">
+        <nav aria-label="Page" className="border-t border-line bg-app-bg/92 backdrop-blur-xl px-10 py-6 lg:hidden">
           <ul className="grid gap-4">
             {LINKS.map(([href, label]) => (
               <li key={href}>

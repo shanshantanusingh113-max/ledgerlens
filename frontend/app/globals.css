@@ -373,10 +373,42 @@ textarea:focus-visible {
     animation: none;
   }
   .pill,
+  .btn,
   .link-underline {
     transition: none;
   }
+  .glass::after {
+    animation: none;
+  }
   .progress {
     display: none;
+  }
+}
+
+/* The nav turns to glass once the page is scrolled: translucent and blurred, with a specular
+   hairline under its lower edge and a sheen that drifts across the top. */
+.glass {
+  background-color: color-mix(in srgb, var(--app-bg) 72%, transparent);
+  box-shadow:
+    inset 0 -1px 0 color-mix(in srgb, var(--ink) 14%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--ink) 8%, transparent),
+    0 16px 34px -30px color-mix(in srgb, var(--app-bg) 92%, transparent);
+}
+.glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(104deg, transparent 34%, color-mix(in srgb, var(--ink) 7%, transparent) 50%, transparent 66%);
+  background-size: 240% 100%;
+  background-repeat: no-repeat;
+  animation: nav-sheen 9s linear infinite;
+}
+@keyframes nav-sheen {
+  from {
+    background-position: 190% 0;
+  }
+  to {
+    background-position: -90% 0;
   }
 }
