@@ -39,10 +39,9 @@ const THEME = `(function(){try{var t=localStorage.getItem("ll-theme");document.d
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${spartan.variable} ${jetbrains.variable} h-full antialiased`}>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME }} />
-      </head>
       <body className="min-h-full">
+        {/* First thing in the body, so the canvas colour is set before anything paints. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME }} />
         <RunProvider>{children}</RunProvider>
       </body>
     </html>
