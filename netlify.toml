@@ -1,12 +1,13 @@
 # Netlify build for the Next.js frontend. The backend is a separate service (see README.md).
-# publish is written from the repo root because that is where the CLI resolves it.
+# Install is written out because the lockfile sits under frontend, which is the base directory.
 [build]
   base = "frontend"
-  command = "pnpm build"
-  publish = "frontend/.next"
+  command = "pnpm install --frozen-lockfile && pnpm build"
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "24"
+  PNPM_VERSION = "10.20.0"
   NEXT_TELEMETRY_DISABLED = "1"
 
 # Gives /findings/[id] a serverless function. Without it Netlify deploys the static
