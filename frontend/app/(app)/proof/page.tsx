@@ -184,29 +184,29 @@ export default function ProofPage() {
         {report.misses.length === 0 ? (
           <p className="mt-5 text-[16px]">Nothing was missed and nothing was flagged wrongly in these months.</p>
         ) : (
-          <table className="w-full border-collapse text-[14px]">
+          <table className="data">
             <thead>
-              <tr className="border-b border-line text-left text-ink-2">
-                <th className="py-2.5 pr-4 font-semibold">What went wrong</th>
-                <th className="px-4 py-2.5 font-semibold">Kind of Finding</th>
-                <th className="px-4 py-2.5 font-semibold">Record</th>
-                <th className="py-2.5 pl-4 font-semibold">The detail</th>
+              <tr>
+                <th>What went wrong</th>
+                <th>Kind of Finding</th>
+                <th>Record</th>
+                <th>The detail</th>
               </tr>
             </thead>
             <tbody>
               {report.misses.map((m) => (
-                <tr key={`${m.kind}-${m.finding_type}-${m.entity_id}`} className="border-b border-line-2 align-top">
-                  <td className="whitespace-nowrap py-2.5 pr-4 font-semibold">
+                <tr key={`${m.kind}-${m.finding_type}-${m.entity_id}`} className="align-top">
+                  <td className="whitespace-nowrap font-semibold">
                     <span className={`mr-2 inline-block size-2 rounded-full ${m.kind === "missed" ? "bg-bad" : "bg-dup"}`} aria-hidden />
                     {m.kind === "missed" ? "Planted, not caught" : "Flagged, not planted"}
                   </td>
-                  <td className="whitespace-nowrap px-4 py-2.5">{m.label}</td>
-                  <td className="whitespace-nowrap px-4 py-2.5 font-mono text-[13px]">{m.entity_id}</td>
-                  <td className="py-2.5 pl-4 text-ink-2">
+                  <td className="whitespace-nowrap">{m.label}</td>
+                  <td className="num whitespace-nowrap text-[13px]">{m.entity_id}</td>
+                  <td className="text-ink-2">
                     {m.detail}
                     {m.expected && m.recorded && (
                       <span>
-                        . Expected <span className="font-mono text-[13px] text-ink">{m.expected}</span>, recorded <span className="font-mono text-[13px] text-ink">{m.recorded}</span>
+                        . Expected <span className="num text-[13px] text-ink">{m.expected}</span>, recorded <span className="num text-[13px] text-ink">{m.recorded}</span>
                       </span>
                     )}
                   </td>
@@ -262,36 +262,36 @@ export default function ProofPage() {
 
       <section className="px-2">
         <Heading note="worst first">Every kind of Finding</Heading>
-        <table className="w-full border-collapse text-[14px]">
+        <table className="data text-[14.5px]">
           <thead>
-            <tr className="border-b border-line text-right text-ink-2">
-              <th className="py-2.5 pr-3 text-left font-semibold">Kind</th>
-              <th className="w-[30%] px-3 py-2.5 text-left font-semibold">Catch rate</th>
-              <th className="px-3 py-2.5 font-semibold">Planted</th>
-              <th className="px-3 py-2.5 font-semibold">Caught</th>
-              <th className="px-3 py-2.5 font-semibold">False alarms</th>
-              <th className="py-2.5 pl-3 font-semibold">False alarm rate</th>
+            <tr>
+              <th>Kind</th>
+              <th className="w-[30%]">Catch rate</th>
+              <th className="right">Planted</th>
+              <th className="right">Caught</th>
+              <th className="right">False alarms</th>
+              <th className="right">False alarm rate</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((row) => (
-              <tr key={row.finding_type} className="border-b border-line-2 text-right">
-                <td className="py-2 pr-3 text-left">
+              <tr key={row.finding_type}>
+                <td>
                   {row.label}
                   {row.source === "ml" && <span className="ml-2 text-[13px] font-semibold text-miss">trained matcher</span>}
                 </td>
-                <td className="px-3 py-2">
+                <td>
                   <span className="flex items-center gap-3">
                     <span className="h-2.5 flex-1 rounded-bar bg-line-2">
                       <span className={`block h-full rounded-bar ${(row.catch_rate ?? 0) >= 0.9 ? "bg-ok" : "bg-dup"}`} style={{ width: `${(row.catch_rate ?? 0) * 100}%` }} />
                     </span>
-                    <span className="w-12 font-mono font-semibold">{percent(row.catch_rate)}</span>
+                    <span className="num w-12 font-semibold">{percent(row.catch_rate)}</span>
                   </span>
                 </td>
-                <td className="px-3 py-2 font-mono">{row.planted}</td>
-                <td className="px-3 py-2 font-mono">{row.caught}</td>
-                <td className="px-3 py-2 font-mono">{row.false_alarms}</td>
-                <td className="py-2 pl-3 font-mono">{percent(row.false_alarm_rate, 1)}</td>
+                <td className="num right">{row.planted}</td>
+                <td className="num right">{row.caught}</td>
+                <td className="num right">{row.false_alarms}</td>
+                <td className="num right">{percent(row.false_alarm_rate, 1)}</td>
               </tr>
             ))}
           </tbody>

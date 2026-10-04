@@ -32,7 +32,7 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
     <button
       onClick={onClick}
       aria-pressed={active}
-      className={`border-b-2 px-0.5 pb-1 text-[15px] font-semibold ${active ? "border-ink text-ink" : "border-transparent text-ink-2 hover:text-ink"}`}
+      className={`border-b-2 px-0.5 pb-1 text-[15px] font-semibold transition-colors ${active ? "border-iris text-ink" : "border-transparent text-ink-2 hover:text-ink"}`}
     >
       {children}
     </button>
@@ -108,7 +108,7 @@ function MatchPanel({ matchId, onClose }: { matchId: string; onClose: () => void
               <Side title={detail.left_all.length > 1 ? "Invoices" : "Invoice"} records={detail.left_all} />
               <Side title={TABLE_NAMES[detail.right[0]?.table] ?? KIND_NAME[detail.match.kind]} records={detail.right} />
             </div>
-            <div className="rounded-surface bg-inset p-5">
+            <div className="rail rail-iris">
               <p className="mb-1 font-semibold text-orange-deep">Why these belong together</p>
               <ul className="list-disc pl-5">
                 {detail.match.reasons.map((reason) => (
@@ -181,7 +181,7 @@ export default function WorkbenchPage() {
         }
       />
 
-      <div className="card p-4">
+      <div className="card pt-4">
         {tab === "findings" ? (
           <div className="mb-3 flex flex-wrap items-center gap-2">
             {CATEGORIES.map((c) => (
@@ -241,14 +241,14 @@ export default function WorkbenchPage() {
             <p className="mb-1 text-[13px] text-ink-3">
               {matches.total.toLocaleString("en-IN")} Matches{matches.total > matches.items.length ? `, showing the ${matches.items.length} that need the most attention` : ""}
             </p>
-            <table className="w-full border-collapse text-[13px]">
+            <table className="data text-[14px]">
               <thead>
-                <tr className="border-b border-line text-left text-ink-3">
-                  <th className="px-3 py-2 font-semibold">Invoice</th>
-                  <th className="px-3 py-2 font-semibold">Matched with</th>
-                  <th className="px-3 py-2 font-semibold">Band</th>
-                  <th className="px-3 py-2 text-right font-semibold">How sure</th>
-                  <th className="px-3 py-2 font-semibold">Why</th>
+                <tr>
+                  <th>Invoice</th>
+                  <th>Matched with</th>
+                  <th>Band</th>
+                  <th className="right">How sure</th>
+                  <th>Why</th>
                 </tr>
               </thead>
               <tbody>
@@ -259,18 +259,18 @@ export default function WorkbenchPage() {
                     role="button"
                     onClick={() => setOpenMatch(m.id)}
                     onKeyDown={(e) => e.key === "Enter" && setOpenMatch(m.id)}
-                    className="cursor-pointer border-b border-line-2 hover:bg-cream-2"
+                    className="group cursor-pointer"
                   >
-                    <td className="px-3 py-2.5 font-mono">{m.invoice_ids.join(", ")}</td>
-                    <td className="px-3 py-2.5 font-mono">
+                    <td className="num text-[13px]">{m.invoice_ids.join(", ")}</td>
+                    <td className="num text-[13px]">
                       <span className="mr-2 font-sans text-ink-3">{KIND_NAME[m.kind]}</span>
                       {m.right_ids.join(", ") || <span className="font-sans text-ink-3">nothing</span>}
                     </td>
-                    <td className="px-3 py-2.5">
+                    <td>
                       <BandBadge band={m.band} layer={m.layer} />
                     </td>
-                    <td className="px-3 py-2.5 text-right font-mono">{percent(m.confidence)}</td>
-                    <td className="max-w-[420px] truncate px-3 py-2.5 text-ink-2">{m.reasons[0]}</td>
+                    <td className="num right">{percent(m.confidence)}</td>
+                    <td className="max-w-[420px] truncate text-ink-2 transition-colors group-hover:text-ink">{m.reasons[0]}</td>
                   </tr>
                 ))}
               </tbody>

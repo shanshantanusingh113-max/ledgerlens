@@ -126,14 +126,19 @@ export default function DashboardPage() {
   return (
     <div className="grid gap-12 pb-6">
       <div>
-        <div className="flex items-baseline justify-between gap-6 px-2">
-          <h1 className="font-display text-[34px] font-extrabold leading-none tracking-[-0.02em]">{periodName(summary.period)}</h1>
-          <p className="text-[15px] text-ink-2">
-            {summary.invoice_count.toLocaleString("en-IN")} invoices checked against the ledger, the bank statement and GSTR-2B · {openFindings} open Findings
+        <div className="flex items-end justify-between gap-6 px-2">
+          <div>
+            <p className="micro">Dashboard</p>
+            <h1 className="mt-2 font-display text-[52px] font-extrabold leading-[0.94] tracking-[-0.03em]">{periodName(summary.period)}</h1>
+          </div>
+          <p className="pb-1.5 text-right text-[15px] leading-relaxed text-ink-2">
+            <span className="num text-ink">{summary.invoice_count.toLocaleString("en-IN")}</span> invoices checked against the ledger, the bank statement and GSTR-2B
+            <br />
+            <span className="num text-ink">{openFindings}</span> open Findings
           </p>
         </div>
 
-        <div className="mt-4">
+        <div className="mt-5">
           <MoneyStrip money={summary} />
         </div>
 

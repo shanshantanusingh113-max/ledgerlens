@@ -146,22 +146,22 @@ export function FindingBody({ findingId, onClose }: { findingId: string; onClose
 
       {detail.diff.length > 0 && (
         <div className="border-t-2 border-ink">
-          <table className="w-full border-collapse text-[13px]">
+<table className="data text-[13.5px]">
             <thead>
-              <tr className="border-b border-line text-ink-3">
-                <th className="px-3 py-2 text-left font-semibold">Field</th>
-                <th className="px-3 py-2 text-right font-semibold">{leftName}</th>
-                {showRight && <th className="px-3 py-2 text-right font-semibold">{rightName}</th>}
-                {showExpected && <th className="px-3 py-2 text-right font-semibold">Should be</th>}
+              <tr>
+                <th>Field</th>
+                <th className="right">{leftName}</th>
+                {showRight && <th className="right">{rightName}</th>}
+                {showExpected && <th className="right">Should be</th>}
               </tr>
             </thead>
             <tbody>
               {detail.diff.map((d) => (
-                <tr key={d.field} className="border-b border-line-2 last:border-0">
-                  <td className="px-3 py-2">{d.label}</td>
-                  <td className={`px-3 py-2 text-right font-mono ${d.differs ? "font-semibold text-bad" : ""}`}>{fieldValue(d.field, d.left)}</td>
-                  {showRight && <td className={`px-3 py-2 text-right font-mono ${d.differs && !showExpected ? "font-semibold text-ok" : ""}`}>{fieldValue(d.field, d.right)}</td>}
-                  {showExpected && <td className="px-3 py-2 text-right font-mono font-semibold text-ok">{fieldValue(d.field, d.expected)}</td>}
+                <tr key={d.field}>
+                  <td>{d.label}</td>
+                  <td className={`num right ${d.differs ? "font-semibold text-bad" : ""}`}>{fieldValue(d.field, d.left)}</td>
+                  {showRight && <td className={`num right ${d.differs && !showExpected ? "font-semibold text-ok" : ""}`}>{fieldValue(d.field, d.right)}</td>}
+                  {showExpected && <td className="num right font-semibold text-ok">{fieldValue(d.field, d.expected)}</td>}
                 </tr>
               ))}
             </tbody>
@@ -175,7 +175,7 @@ export function FindingBody({ findingId, onClose }: { findingId: string; onClose
         </div>
       )}
 
-      <div className="rounded-surface bg-inset p-5">
+      <div className="rail rail-iris">
         <p className="mb-1 flex items-center gap-2 font-semibold text-orange-deep">
           <Sparkles className="size-4" aria-hidden /> Why this was flagged
         </p>

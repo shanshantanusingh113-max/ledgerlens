@@ -8,17 +8,17 @@ import { CATEGORY_TONE, Pill, StatusPill } from "./ui";
 export function FindingTable({ rows, onOpen, showStatus = false }: { rows: FindingRow[]; onOpen: (id: string) => void; showStatus?: boolean }) {
   return (
     <div className="overflow-x-auto">
-      <table className="w-full border-collapse text-[13px]">
+      <table className="data text-[14px]">
         <thead>
-          <tr className="border-b border-line text-left text-ink-3">
-            <th className="px-3 py-2 font-semibold">Record</th>
-            <th className="px-3 py-2 font-semibold">Party</th>
-            <th className="px-3 py-2 font-semibold">Finding</th>
-            <th className="px-3 py-2 text-right font-semibold">Rupee impact</th>
-            <th className="px-3 py-2 text-right font-semibold">How sure</th>
-            <th className="px-3 py-2 font-semibold">Deadline</th>
-            {showStatus && <th className="px-3 py-2 font-semibold">Status</th>}
-            <th className="px-3 py-2" />
+          <tr>
+            <th>Record</th>
+            <th>Party</th>
+            <th>Finding</th>
+            <th className="right">Rupee impact</th>
+            <th className="right">How sure</th>
+            <th>Deadline</th>
+            {showStatus && <th>Status</th>}
+            <th />
           </tr>
         </thead>
         <tbody>
@@ -30,31 +30,31 @@ export function FindingTable({ rows, onOpen, showStatus = false }: { rows: Findi
               aria-label={`Open Finding: ${f.title}`}
               onClick={() => onOpen(f.id)}
               onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), onOpen(f.id))}
-              className="cursor-pointer border-b border-line-2 hover:bg-cream-2 focus-visible:bg-cream-2"
+              className="group cursor-pointer"
             >
-              <td className="px-3 py-2.5 font-mono">{f.record_refs[0]?.id}</td>
-              <td className="max-w-[200px] truncate px-3 py-2.5">{f.party?.name ?? "Company"}</td>
-              <td className="px-3 py-2.5">
+              <td className="num text-[13px]">{f.record_refs[0]?.id}</td>
+              <td className="max-w-[200px] truncate">{f.party?.name ?? "Company"}</td>
+              <td>
                 <Pill tone={CATEGORY_TONE[f.category]}>{f.label}</Pill>
               </td>
-              <td className="px-3 py-2.5 text-right font-mono">
+              <td className="num right">
                 {f.impact_type === "none" ? (
                   <span className="text-ink-3">none</span>
                 ) : (
                   <>
-                    {rupees(f.impact_paise)} <span className="font-sans text-[12px] text-ink-3">{IMPACT_WORDS[f.impact_type]}</span>
+                    <span className="font-semibold">{rupees(f.impact_paise)}</span> <span className="text-[12.5px] text-ink-3">{IMPACT_WORDS[f.impact_type]}</span>
                   </>
                 )}
               </td>
-              <td className="px-3 py-2.5 text-right font-mono">{percent(f.confidence)}</td>
-              <td className="px-3 py-2.5 text-ink-2">{f.deadline ? date(f.deadline) : ""}</td>
+              <td className="num right">{percent(f.confidence)}</td>
+              <td className="text-ink-2">{f.deadline ? date(f.deadline) : ""}</td>
               {showStatus && (
-                <td className="px-3 py-2.5">
+                <td>
                   <StatusPill status={f.status} />
                 </td>
               )}
-              <td className="px-3 py-2.5 text-right font-semibold text-orange-deep">
-                <span className="inline-flex items-center gap-0.5">
+              <td className="right">
+                <span className="inline-flex items-center gap-0.5 font-semibold text-ink-3 transition-colors group-hover:text-orange-deep">
                   See why and fix <ChevronRight className="size-4" aria-hidden />
                 </span>
               </td>

@@ -46,27 +46,27 @@ const percent = (share: number) => `${Math.round(share * 100)} percent`;
 
 function Planted({ rows }: { rows: PlantedType[] }) {
   return (
-    <table className="w-full border-collapse text-[14px]">
+    <table className="data">
       <thead>
-        <tr className="border-b border-line text-left text-ink-2">
-          <th className="py-2.5 pr-4 font-semibold">Kind</th>
-          <th className="px-4 py-2.5 text-right font-semibold">Planted</th>
-          <th className="px-4 py-2.5 font-semibold">Where from</th>
-          <th className="py-2.5 pl-4 font-semibold">One real example</th>
+        <tr>
+          <th>Kind</th>
+          <th className="right">Planted</th>
+          <th>Where from</th>
+          <th>One real example</th>
         </tr>
       </thead>
       <tbody>
         {rows.map((p) => (
-          <tr key={`${p.issue_type}-${p.source}`} className="border-b border-line-2 align-top">
-            <td className="py-2.5 pr-4 font-semibold">{p.label}</td>
-            <td className="px-4 py-2.5 text-right font-display text-[18px] font-bold leading-tight">{p.count.toLocaleString("en-IN")}</td>
-            <td className="whitespace-nowrap px-4 py-2.5 text-ink-2">{p.source === "workbook" ? "The workbook" : "Added with GSTR-2B"}</td>
-            <td className="py-2.5 pl-4">
-              <span className="font-mono text-[13px]">{p.example.entity_id}</span>
+          <tr key={`${p.issue_type}-${p.source}`} className="align-top">
+            <td className="font-semibold">{p.label}</td>
+            <td className="num right text-[17px] font-semibold">{p.count.toLocaleString("en-IN")}</td>
+            <td className="whitespace-nowrap text-ink-2">{p.source === "workbook" ? "The workbook" : "Added with GSTR-2B"}</td>
+            <td>
+              <span className="num text-[13px]">{p.example.entity_id}</span>
               {p.example.expected && p.example.recorded && (
                 <span className="text-ink-2">
                   {" "}
-                  should be <span className="font-mono text-[13px] text-ink">{p.example.expected}</span>, recorded as <span className="font-mono text-[13px] text-ink">{p.example.recorded}</span>
+                  should be <span className="num text-[13px] text-ink">{p.example.expected}</span>, recorded as <span className="num text-[13px] text-ink">{p.example.recorded}</span>
                 </span>
               )}
               {p.example.impact_paise > 0 && <span className="text-ink-2"> ({rupees(p.example.impact_paise)})</span>}
@@ -151,11 +151,11 @@ function Browser() {
         <EmptyState title="No records match" hint="Try another period, or clear the search." />
       ) : (
         <div className="mt-3 overflow-x-auto">
-          <table className="w-full border-collapse text-[13px]">
+          <table className="data text-[13.5px]">
             <thead>
-              <tr className="border-b border-line text-left text-ink-2">
+              <tr>
                 {spec.columns.map(([field, label]) => (
-                  <th key={field} className={`px-3 py-2 font-semibold first:pl-0 ${field.endsWith("_paise") || field === "rate_pct" ? "text-right" : ""}`}>
+                  <th key={field} className={`first:pl-0 ${field.endsWith("_paise") || field === "rate_pct" ? "right" : ""}`}>
                     {label}
                   </th>
                 ))}
@@ -163,12 +163,12 @@ function Browser() {
             </thead>
             <tbody>
               {data.items.map((row) => (
-                <tr key={String(row.id)} className="border-b border-line-2">
+                <tr key={String(row.id)}>
                   {spec.columns.map(([field]) => (
                     <td
                       key={field}
-                      className={`max-w-[360px] truncate px-3 py-2 first:pl-0 ${field.endsWith("_paise") || field === "rate_pct" ? "text-right font-mono" : ""} ${
-                        field === "id" || field.includes("gstin") || field === "invoice_ref" || field === "invoice_number" ? "font-mono" : ""
+                      className={`max-w-[360px] truncate first:pl-0 ${field.endsWith("_paise") || field === "rate_pct" ? "num right" : ""} ${
+                        field === "id" || field.includes("gstin") || field === "invoice_ref" || field === "invoice_number" ? "num" : ""
                       }`}
                     >
                       {fieldValue(field, row[field])}
@@ -262,11 +262,11 @@ export default function DataPage() {
           title="The data"
           lead="Everything LedgerLens shows comes from one workbook and the GSTR-2B lines generated from it. This page says what is in it, what was planted and how to check any record yourself."
         />
-        <div className="grid grid-cols-4 gap-x-10 px-2">
+        <div className="tiles grid-cols-4">
           {(["invoices", "ledger", "bank", "gstr2b"] as const).map((name) => (
-            <div key={name} className="border-t-2 border-ink pt-4">
-              <p className="font-display text-[48px] font-extrabold leading-none">{rows[name]?.toLocaleString("en-IN")}</p>
-              <p className="mt-1 text-[16px] font-semibold">{name === "gstr2b" ? "GSTR-2B lines" : name === "ledger" ? "ledger entries" : name === "bank" ? "bank lines" : "invoices"}</p>
+            <div key={name} className="tile">
+              <p className="tile-value">{rows[name]?.toLocaleString("en-IN")}</p>
+              <p className="mt-2 text-[16px] font-semibold">{name === "gstr2b" ? "GSTR-2B lines" : name === "ledger" ? "ledger entries" : name === "bank" ? "bank lines" : "invoices"}</p>
               <p className="mt-1 text-[14px] text-ink-2">{SHEETS[name][1]}</p>
             </div>
           ))}
@@ -276,13 +276,13 @@ export default function DataPage() {
       <div className="grid grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-12 px-2">
         <section>
           <Heading note="one year">What is in the workbook</Heading>
-          <table className="mt-2 w-full border-collapse text-[15px]">
+          <table className="data mt-2 text-[15px]">
             <tbody>
               {data.sheets.map((s) => (
-                <tr key={s.name} className="border-b border-line-2 align-baseline">
-                  <td className="py-2.5 pr-4 font-semibold">{SHEETS[s.name]?.[0] ?? s.name}</td>
-                  <td className="px-4 py-2.5 text-right font-mono">{s.rows.toLocaleString("en-IN")}</td>
-                  <td className="py-2.5 pl-4 text-[14px] text-ink-2">{SHEETS[s.name]?.[1]}</td>
+                <tr key={s.name}>
+                  <td className="font-semibold">{SHEETS[s.name]?.[0] ?? s.name}</td>
+                  <td className="num right">{s.rows.toLocaleString("en-IN")}</td>
+                  <td className="text-[14px] text-ink-2">{SHEETS[s.name]?.[1]}</td>
                 </tr>
               ))}
             </tbody>

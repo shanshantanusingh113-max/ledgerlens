@@ -45,29 +45,29 @@ export default function LiabilityPage() {
       <div className="grid grid-cols-[minmax(0,3fr)_minmax(0,2fr)] gap-4">
         <section className="card p-5">
           <h2 className="mb-4 font-display text-[28px] font-bold leading-tight">Net payable by tax type</h2>
-          <table className="w-full border-collapse">
+          <table className="data">
             <thead>
-              <tr className="border-b border-line text-right text-[13px] text-ink-3">
-                <th className="px-3 py-2 text-left font-semibold">Tax type</th>
-                <th className="px-3 py-2 font-semibold">Output tax on sales</th>
-                <th className="px-3 py-2 font-semibold">Eligible ITC</th>
-                <th className="px-3 py-2 font-semibold">Net payable</th>
+              <tr>
+                <th>Tax type</th>
+                <th className="right">Output tax on sales</th>
+                <th className="right">Eligible ITC</th>
+                <th className="right">Net payable</th>
               </tr>
             </thead>
-            <tbody className="font-mono">
+            <tbody>
               {data.by_tax_type.map((row) => (
-                <tr key={row.tax_type} className="border-b border-line-2 text-right">
-                  <td className="px-3 py-3 text-left font-sans font-semibold">{TAX_NAME[row.tax_type]}</td>
-                  <td className="px-3 py-3">{rupees(row.output_paise)}</td>
-                  <td className="px-3 py-3 text-ok">{rupees(row.eligible_itc_paise)}</td>
-                  <td className="px-3 py-3 font-semibold">{rupees(row.net_paise)}</td>
+                <tr key={row.tax_type}>
+                  <td className="font-semibold">{TAX_NAME[row.tax_type]}</td>
+                  <td className="num right">{rupees(row.output_paise)}</td>
+                  <td className="num right text-ok">{rupees(row.eligible_itc_paise)}</td>
+                  <td className="num right font-semibold">{rupees(row.net_paise)}</td>
                 </tr>
               ))}
-              <tr className="text-right font-semibold">
-                <td className="px-3 py-3 text-left font-sans">Total</td>
-                <td className="px-3 py-3">{rupees(output)}</td>
-                <td className="px-3 py-3 text-ok">{rupees(itc)}</td>
-                <td className="px-3 py-3 text-[16px]">{rupees(net)}</td>
+              <tr className="border-t-2 border-ink font-semibold">
+                <td>Total</td>
+                <td className="num right">{rupees(output)}</td>
+                <td className="num right text-ok">{rupees(itc)}</td>
+                <td className="num right text-[17px] font-display">{rupees(net)}</td>
               </tr>
             </tbody>
           </table>
