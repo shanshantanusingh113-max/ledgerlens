@@ -119,6 +119,9 @@ export default function GraphPage() {
   const [party, setParty] = useState<PartyView | null>(null);
   const [openId, setOpenId] = useState<string | null>(null);
   const canvas = useRef<HTMLDivElement>(null);
+  const [cy, setCy] = useState<import("cytoscape").Core | null>(null);
+  // The first linked group is picked for the panel on load, but the ring only dims once a reader asks for it.
+  const [picked, setPicked] = useState(false);
 
   useEffect(() => {
     if (!runId) return;
@@ -160,22 +163,22 @@ export default function GraphPage() {
     import("cytoscape").then(({ default: cytoscape }) => {
       if (cancelled || !canvas.current) return;
       const names = new Map(graph.nodes.map((n) => [n.id, n]));
-      // The Company sits left of centre, ordinary Parties fan out behind it in rows and linked Parties stand apart on the right.
+      // The Company sits in the middle, the Parties stand round it, and linked Parties stand on a closer ring.
       const risky = graph.nodes.filter((n) => n.kind !== "company" && n.risk !== "clean" && (side === "all" || n.kind === side));
       const shown = new Set(["company", ...risky.map((n) => n.id), ...plain.map((n) => n.id)]);
       const position = new Map<string, { x: number; y: number }>([["company", { x: 0, y: 0 }]]);
-      const perRow = plain.length <= FEW ? FEW : 26;
+      const onRing = (count: number, i: number, radius: number) => {
+        const angle = (Math.PI * 2 * i) / Math.max(1, count) - Math.PI / 2;
+        return { x: Math.cos(angle) * radius, y: Math.sin(angle) * radius };
+      };
+      // Past a certain count one circle turns into a knot, so the ring is drawn in bands.
+      const bands = Math.max(1, Math.ceil(plain.length / 60));
       plain.forEach((n, i) => {
-        const row = Math.floor(i / perRow);
-        const inRow = Math.min(perRow, plain.length - row * perRow);
-        const angle = (Math.PI * (100 + (160 * (i % perRow)) / Math.max(1, inRow - 1))) / 180;
-        const radius = plain.length <= FEW ? (i % 2 ? 300 : 220) : 190 + row * 62 + (i % 2 ? 22 : 0);
-        position.set(n.id, { x: Math.cos(angle) * radius, y: -Math.sin(angle) * radius });
+        const band = Math.floor(i / Math.ceil(plain.length / bands));
+        const inBand = Math.ceil(plain.length / bands);
+        position.set(n.id, onRing(inBand, i % inBand, 400 + band * 96));
       });
-      risky.forEach((n, i) => {
-        const angle = (Math.PI * (55 - (110 * i) / Math.max(1, risky.length - 1))) / 180;
-        position.set(n.id, { x: Math.cos(angle) * 330, y: -Math.sin(angle) * 250 });
-      });
+      risky.forEach((n, i) => position.set(n.id, onRing(risky.length, i, 250)));
       const named = plain.length <= 8;
       cy = cytoscape({
         container: canvas.current,
@@ -237,7 +240,12 @@ export default function GraphPage() {
           { selector: "node[?quiet]", style: { opacity: 0.35 } },
           { selector: "node:selected", style: { "border-width": 4, "border-color": "#FFFFFF", opacity: 1 } },
           { selector: "edge", style: { width: 1.2, "line-color": "rgba(255,239,216,0.22)", "curve-style": "bezier" } },
-          { selector: "edge[?risky][kind = 'trade']", style: { width: 3, "line-color": COLOURS.company } },
+          { selector: "edge[kind = 'trade']", style: { "target-arrow-shape": "triangle", "arrow-scale": 0.8, "target-arrow-color": "rgba(255,239,216,0.4)" } },
+          { selector: "edge[?risky][kind = 'trade']", style: { width: 3, "line-color": COLOURS.company, "target-arrow-color": COLOURS.company } },
+          { selector: "node.lit", style: { "border-width": 4, "border-color": "#FFF7EC", opacity: 1 } },
+          { selector: "node.dim", style: { opacity: 0.22 } },
+          { selector: "edge.lit", style: { width: 2.6, opacity: 1 } },
+          { selector: "edge.dim", style: { opacity: 0.12 } },
           {
             selector: "edge[kind != 'trade']",
             style: {
@@ -264,17 +272,36 @@ export default function GraphPage() {
         const id = event.target.id();
         if (id === "company") return;
         const ring = graph.rings.find((r) => r.members.includes(id));
-        if (ring) setSelected(ring.id);
+        if (ring) {
+          setPicked(true);
+          setSelected(ring.id);
+        }
         setPartyId(id);
       });
+      setCy(cy);
     });
     return () => {
       cancelled = true;
+      setCy(null);
       cy?.destroy();
     };
     // plainKey stands for the list of ordinary Parties drawn.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [graph, side, plainKey]);
+
+  // Picking a linked group lights its Parties and links and lets the rest of the ring go quiet.
+  useEffect(() => {
+    if (!cy || !graph) return;
+    cy.elements().removeClass("lit dim");
+    if (!picked) return;
+    const ring = graph.rings.find((r) => r.id === selected);
+    if (!ring || ring.members.length === 0) return;
+    const members = cy.$(ring.members.join(", "));
+    members.addClass("lit");
+    members.connectedEdges().addClass("lit");
+    cy.nodes().not(members).addClass("dim");
+    cy.edges().not(members.connectedEdges()).addClass("dim");
+  }, [selected, graph, cy, picked]);
 
   if (error) return <ErrorState message={error} />;
 
@@ -318,7 +345,7 @@ export default function GraphPage() {
           {!graph ? (
             <Skeleton className="h-[640px] opacity-20" />
           ) : (
-            <div ref={canvas} className="h-[640px] w-[calc(100%-390px)]" role="img" aria-label={`Network of the Company and its Parties for ${period ? periodName(period) : "the period"}. ${graph.rings.length} linked groups.`} />
+            <div ref={canvas} className="h-[640px] w-[calc(100%-390px)]" role="img" aria-label={`The Company at the centre of a ring of its Parties for ${period ? periodName(period) : "the period"}. ${graph.rings.length} linked groups.`} />
           )}
 
           {graph && (
@@ -334,7 +361,10 @@ export default function GraphPage() {
                   return (
                     <button
                       key={r.id}
-                      onClick={() => setSelected(r.id)}
+                      onClick={() => {
+                        setPicked(true);
+                        setSelected(r.id);
+                      }}
                       aria-pressed={active}
                       className={`rounded-surface border p-4 text-left text-cream ${active ? "border-[#F26D6D]/70 bg-slate-panel" : "border-white/10 bg-slate-panel opacity-80 hover:opacity-100"}`}
                     >
